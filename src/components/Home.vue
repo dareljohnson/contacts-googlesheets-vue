@@ -17,7 +17,11 @@
       </v-layout>
       <v-layout row wrap class="mt-2" v-else>
           <v-flex xs12>
-              <p>Flex box</p>
+              <ul>
+                  <li v-for="contact in contacts" :key="contact.ID">
+                      {{ contact.First_Name }}
+                  </li>
+              </ul>
           </v-flex>
       </v-layout>
       <v-layout row wrap class="mt-2">
@@ -29,7 +33,14 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
+      data () {
+          return {
+              contacts: {}
+          }
+      },
       computed:{
         /* // get featured meetups for Carousel
         meetups (){
@@ -40,7 +51,18 @@ export default {
         } 
       },
       methods: {
-         }
+         },
+      created () {
+            axios.get('https://sheetdb.io/api/v1/5ad90898901b3')
+            .then(response => {
+                // JSON responses are automatically parsed.
+                //console.log(response)
+                return this.contacts = response.data
+            })
+            .catch(error => {
+                this.errors.push(error)
+            })
+      }
 }
 </script>
 
