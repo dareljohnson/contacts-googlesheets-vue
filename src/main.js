@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { store } from './store'
-import axios from 'axios'
+
 import {
   Vuetify,
   VApp,
@@ -18,7 +18,8 @@ import {
   VProgressLinear,
   VAlert,
   VPagination,
-  VDataTable
+  VDataTable,
+  VTextField
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -37,7 +38,8 @@ Vue.use(Vuetify, {
     VProgressLinear,
     VAlert,
     VPagination,
-    VDataTable
+    VDataTable,
+    VTextField
   },
   theme: {
     primary: '#81c784',

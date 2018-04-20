@@ -47,12 +47,43 @@
               <p class="text-xs-center">Add your name to the list!</p>
           </v-flex>
       </v-layout>
+      <v-layout row>
+        <v-flex xs12>
+            <form @submit.prevent="onCreateContact">
+                <v-layout col>
+                    <v-flex xs12 sm6 offset-sm3>
+                    <v-text-field
+                        label="First Name"
+                        name="first_name"
+                        id="first_name"
+                        v-model="first_name"
+                        ></v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout col>
+                    <v-flex xs12 sm6 offset-sm3>      
+                        <v-text-field
+                        label="Last Name"
+                        name="last_name"
+                        id="last_name"
+                        v-model="last_name"
+                        ></v-text-field>
+                    </v-flex>
+                </v-layout>      
+                <v-layout row>
+                    <v-flex xs12 sm6 offset-sm3>      
+                        <v-btn class="primary" 
+                            :disabled="!formIsValid"
+                            type="submit">Create Contact</v-btn>
+                    </v-flex>
+                </v-layout>
+            </form>
+        </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
-import { SheetDB } from '../service/axios-sheetdb'
-
 export default {
       data () {
           return {
@@ -76,7 +107,9 @@ export default {
                   value: 'name'
                   }
               ],
-              pagination: {}
+              pagination: {},
+              first_name:'',
+              last_name:''
           }
       },
       computed:{
@@ -91,12 +124,27 @@ export default {
 
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
         },
+        formIsValid () {
+            return this.first_name !== '' && this.last_name !== '' 
+        },
         loading (){
             return this.$store.getters.loading
         } 
       },
       methods: {
-         }
+        onCreateContact (){
+              if(!this.formIsValid){
+                return
+              }
+              let count = this.$store.getters.loadRowCount
+              const contactData = {
+                    id: count + 1,
+                    first_name: this.first_name.trim(),   
+                    last_name: this.last_name.trim()
+              }
+              this.$store.dispatch('createContact', contactData)
+          }
+      }
 }
 </script>
 
