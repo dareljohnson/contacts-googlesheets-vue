@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { store } from './store'
 import axios from 'axios'
 import {
   Vuetify,
@@ -12,7 +13,12 @@ import {
   VIcon,
   VGrid,
   VToolbar,
-  transitions
+  transitions,
+  VProgressCircular,
+  VProgressLinear,
+  VAlert,
+  VPagination,
+  VDataTable
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -26,7 +32,12 @@ Vue.use(Vuetify, {
     VIcon,
     VGrid,
     VToolbar,
-    transitions
+    transitions,
+    VProgressCircular,
+    VProgressLinear,
+    VAlert,
+    VPagination,
+    VDataTable
   },
   theme: {
     primary: '#81c784',
@@ -45,5 +56,10 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  render: h => h(App)
+  store,
+  render: h => h(App),
+  mounted (){
+    // preload Meetups
+    this.$store.dispatch('loadContacts')
+  }
 })

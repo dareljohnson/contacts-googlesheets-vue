@@ -17,11 +17,29 @@
       </v-layout>
       <v-layout row wrap class="mt-2" v-else>
           <v-flex xs12>
-              <ul>
-                  <li v-for="contact in contacts" :key="contact.ID">
-                      {{ contact.First_Name }}
-                  </li>
-              </ul>
+             <v-data-table
+                :headers="headers"
+                :pagination.sync="pagination"
+                :items="contacts"
+                hide-actions
+                class="elevation-1"
+                :loading="loading"
+                >
+                    <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-middle">{{ props.item.ID }}</td>
+                        <td class="text-xs-middle">{{ props.item.First_Name }}</td>
+                        <td class="text-xs-middle">{{ props.item.Last_Name }}</td>
+                    </template>
+                    <template slot="no-data">
+                        <v-alert :value="true" color="error" icon="warning">
+                            Sorry, nothing to display here :(
+                        </v-alert>
+                    </template>
+              </v-data-table>
+              <div class="text-xs-center pt-2">
+                 <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+              </div>
           </v-flex>
       </v-layout>
       <v-layout row wrap class="mt-2">
@@ -33,36 +51,52 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { SheetDB } from '../service/axios-sheetdb'
 
 export default {
       data () {
           return {
-              contacts: {}
+              headers: [
+                  {
+                  text: 'Id',
+                  align: 'left',
+                  sortable: false,
+                  value: 'name'
+                  },
+                  {
+                  text: 'First Name',
+                  align: 'left',
+                  sortable: false,
+                  value: 'name'
+                  },
+                  {
+                  text: 'Last Name',
+                  align: 'left',
+                  sortable: false,
+                  value: 'name'
+                  }
+              ],
+              pagination: {}
           }
       },
       computed:{
-        /* // get featured meetups for Carousel
-        meetups (){
-            return this.$store.getters.featuredMeetups
-        },*/
+        // get Contacts for Data Table
+        contacts (){
+            return this.$store.getters.loadedContacts
+        },
+        pages () {
+            if (this.pagination.rowsPerPage == null ||
+            this.pagination.totalItems == null
+            ) return 0
+
+            return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+        },
         loading (){
-            //return this.$store.getters.loading
+            return this.$store.getters.loading
         } 
       },
       methods: {
-         },
-      created () {
-            axios.get('https://sheetdb.io/api/v1/5ad90898901b3')
-            .then(response => {
-                // JSON responses are automatically parsed.
-                //console.log(response)
-                return this.contacts = response.data
-            })
-            .catch(error => {
-                this.errors.push(error)
-            })
-      }
+         }
 }
 </script>
 

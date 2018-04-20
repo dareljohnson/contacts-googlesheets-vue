@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import meetup from './contact'
+import contact from './contact'
 import user from './user'
 import shared from './shared'
 
