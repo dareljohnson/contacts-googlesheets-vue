@@ -1,11 +1,10 @@
 import { AXIOSsheetDB } from '../../service/axios-sheetdb'
-//import { GET_DB } from '../../service/sheetdb'
-//import { POST_DB } from '../../service/sheetdb'
-
+import { GET_DB_Count } from '../../service/sheetdb'
 
 export default {
     state: {
-        loadedContacts: []
+        loadedContacts: [],
+        numRows: null
     },
     mutations:{
         setLoadedContacts (state, payload){
@@ -28,6 +27,9 @@ export default {
             if(payload.Last_Name){
                 contact.Last_Name = payload.Last_Name.trim()
             }
+        },
+        setNumLoadedContacts (state, payload){
+            state.numRows = payload
         }
     },
     // ASYNC code here
@@ -63,10 +65,8 @@ export default {
         // create contact and save to store
         createContact ({ commit, getters}, payload) {
             commit('setLoading', true)
-            const numRows = AXIOSsheetDB.get().then (response =>{
-                return response.data.rows
-            })
 
+            //console.log(payload.id)
             const contact = {
                 ID: payload.id,
                 First_Name: payload.first_name.trim(),
@@ -89,6 +89,21 @@ export default {
                 console.log(error)
                 commit('setLoading', false)
             })
+        },
+        getRowsCount({commit}){
+            commit('setLoading', true)
+
+            GET_DB_Count
+            .then (response =>{
+                commit('setLoading', false)
+                //console.log(response.rows)
+                const numRows = response.rows
+                commit('setNumLoadedContacts',numRows)
+            })
+            .catch((error)=>{
+                console.log(error)
+                commit('setLoading', false)
+            })
         }
     },
     getters:{
@@ -103,6 +118,9 @@ export default {
                     return contact.id === contactId
                 })
             }
+        },
+        loadNumRows (state){
+            return state.numRows
         }
     }
 }

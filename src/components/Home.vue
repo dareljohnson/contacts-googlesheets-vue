@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import guid8 from '../filters/uuid'
+
 export default {
       data () {
           return {
@@ -108,6 +110,7 @@ export default {
                   }
               ],
               pagination: {},
+              id: null,
               first_name:'',
               last_name:''
           }
@@ -136,9 +139,9 @@ export default {
               if(!this.formIsValid){
                 return
               }
-              let count = this.$store.getters.loadRowCount
+
               const contactData = {
-                    id: count + 1,
+                    id: guid8(),
                     first_name: this.first_name.trim(),   
                     last_name: this.last_name.trim()
               }

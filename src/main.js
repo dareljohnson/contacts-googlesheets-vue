@@ -60,8 +60,10 @@ new Vue({
   router,
   store,
   render: h => h(App),
-  mounted (){
+  created (){
     // preload Meetups
     this.$store.dispatch('loadContacts')
+    // preload row count
+    this.$store.dispatch('getRowsCount')
   }
 })
