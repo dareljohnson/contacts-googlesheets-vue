@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import guid8 from '../filters/uuid'
+import guid8 from '../filters/uuid8'
 
 export default {
       data () {
