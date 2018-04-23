@@ -146,6 +146,8 @@ export default {
                     last_name: this.last_name.trim()
               }
               this.$store.dispatch('createContact', contactData)
+              // reload contacts
+              this.$store.dispatch('loadContacts')
           }
       }
 }
