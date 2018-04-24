@@ -27,9 +27,10 @@
                 >
                     <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-middle">{{ props.item.ID }}</td>
+                        <!-- <td class="text-xs-middle">{{ props.item.ID }}</td> -->
                         <td class="text-xs-middle">{{ props.item.First_Name }}</td>
                         <td class="text-xs-middle">{{ props.item.Last_Name }}</td>
+                        <td class="text-xs-middle">{{ props.item.Email }}</td>
                     </template>
                     <template slot="no-data">
                         <v-alert :value="true" color="error" icon="warning">
@@ -57,6 +58,7 @@
                         name="first_name"
                         id="first_name"
                         v-model="first_name"
+                        required
                         ></v-text-field>
                     </v-flex>
                 </v-layout>
@@ -67,6 +69,19 @@
                         name="last_name"
                         id="last_name"
                         v-model="last_name"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                </v-layout>    
+                <v-layout col>
+                    <v-flex xs12 sm6 offset-sm3>      
+                        <v-text-field
+                        label="e-Mail"
+                        name="email"
+                        id="email"
+                        v-model="email"
+                        :rules="emailRules"
+                        required
                         ></v-text-field>
                     </v-flex>
                 </v-layout>      
@@ -90,12 +105,12 @@ export default {
       data () {
           return {
               headers: [
-                  {
+                  /* {
                   text: 'Id',
                   align: 'left',
                   sortable: false,
                   value: 'name'
-                  },
+                  }, */
                   {
                   text: 'First Name',
                   align: 'left',
@@ -107,12 +122,23 @@ export default {
                   align: 'left',
                   sortable: false,
                   value: 'name'
+                  },
+                  {
+                  text: 'Email',
+                  align: 'left',
+                  sortable: false,
+                  value: 'name'
                   }
               ],
               pagination: {},
               id: null,
               first_name:'',
-              last_name:''
+              last_name:'',
+              email:'',
+              emailRules: [
+                    (v) => !!v || 'E-mail is required',
+                    (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+              ]
           }
       },
       computed:{
@@ -128,7 +154,7 @@ export default {
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
         },
         formIsValid () {
-            return this.first_name !== '' && this.last_name !== '' 
+            return this.first_name !== '' && this.last_name !== '' && this.email !== ''
         },
         loading (){
             return this.$store.getters.loading
@@ -143,7 +169,8 @@ export default {
               const contactData = {
                     id: guid8(),
                     first_name: this.first_name.trim(),   
-                    last_name: this.last_name.trim()
+                    last_name: this.last_name.trim(),
+                    email: this.email.trim()
               }
               this.$store.dispatch('createContact', contactData)
               // reload contacts

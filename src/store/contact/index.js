@@ -27,6 +27,9 @@ export default {
             if(payload.Last_Name){
                 contact.Last_Name = payload.Last_Name.trim()
             }
+            if(payload.Email){
+                contact.Email = payload.Email.trim()
+            }
         },
         setNumLoadedContacts (state, payload){
             state.numRows = payload
@@ -48,7 +51,8 @@ export default {
                         contacts.push({
                             ID: obj[key].ID,
                             First_Name: obj[key].First_Name,
-                            Last_Name: obj[key].Last_Name
+                            Last_Name: obj[key].Last_Name,
+                            Email: obj[key].Email
                         })
                     }
                 }
@@ -70,7 +74,8 @@ export default {
             const contact = {
                 ID: payload.id,
                 First_Name: payload.first_name.trim(),
-                Last_Name: payload.last_name.trim()
+                Last_Name: payload.last_name.trim(),
+                Email: payload.email !=null ? payload.email.trim() : ''
             }
             const saveContact = {
                 data:[
