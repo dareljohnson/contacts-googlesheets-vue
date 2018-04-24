@@ -55,9 +55,12 @@
                     <v-flex xs12 sm6 offset-sm3>
                     <v-text-field
                         label="First Name"
+                        placeholder="Enter Your First Name"
                         name="first_name"
                         id="first_name"
                         v-model="first_name"
+                        :rules="nameRules"
+                        :counter="15"
                         required
                         ></v-text-field>
                     </v-flex>
@@ -66,9 +69,12 @@
                     <v-flex xs12 sm6 offset-sm3>      
                         <v-text-field
                         label="Last Name"
+                        placeholder="Enter Your Last Name"
                         name="last_name"
                         id="last_name"
                         v-model="last_name"
+                        :rules="nameRules"
+                        :counter="15"
                         required
                         ></v-text-field>
                     </v-flex>
@@ -76,7 +82,8 @@
                 <v-layout col>
                     <v-flex xs12 sm6 offset-sm3>      
                         <v-text-field
-                        label="e-Mail"
+                        label="Email"
+                        placeholder="Enter Your Email Address"
                         name="email"
                         id="email"
                         v-model="email"
@@ -138,6 +145,10 @@ export default {
               emailRules: [
                     (v) => !!v || 'E-mail is required',
                     (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+              ],
+              nameRules: [
+                    (v) => !!v || 'Name is required',
+                    (v) => v && v.length <= 15 || 'Name must be less than 15 characters'
               ]
           }
       },
